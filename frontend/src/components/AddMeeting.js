@@ -1,10 +1,11 @@
 import {useState, useEffect} from 'react';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
-import {Grid, TextField, Button} from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import {post, put, get} from '../Calls.js';
 import {meetingRoute} from '../ApiRoutes.js';
 import { useNavigate, useParams } from 'react-router-dom';
+import {Grid, TextField, Button, Paper, Table, TableBody, TableCell, TableRow, TableContainer, TableHead, IconButton, DialogTitle} from '@material-ui/core';
 
 export default function AddMeeting(){
 
@@ -18,6 +19,7 @@ export default function AddMeeting(){
     const navigate = useNavigate();
     const routerParams = useParams();
     const id = routerParams.id;
+    const [rows, setRows] = useState([]);
 
     useEffect(async () => {
         if (!id)
@@ -42,6 +44,10 @@ export default function AddMeeting(){
 
     return (
         <div>
+
+            <DialogTitle align='left'>
+                <b>Add a meeting</b>
+            </DialogTitle>
 
             <Grid container spacing={3}>
                 <Grid item xs={8} sm={8}>
@@ -83,17 +89,58 @@ export default function AddMeeting(){
                 </Grid>
             </Grid>
 
+            <br/>
+            <br/>
+
             <Button color="secondary" variant='outlined' startIcon={<CancelIcon />}
                 onClick={() => {navigate("/")}}
             >
                 Cancel
             </Button>  
 
-             <Button color="primary" variant='outlined' startIcon={<SaveIcon />}
+            <Button color="primary" variant='outlined' startIcon={<SaveIcon />}
                 onClick={saveMeeting}
             >
                 Save
-            </Button>  
+            </Button> 
+
+            <br/>
+            <br/>
+
+            <DialogTitle align='left'>
+                <b>Add participants (Optional)</b>
+            </DialogTitle>
+
+            <TableContainer component={Paper}>
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Participant Id</TableCell>
+                            <TableCell align="left">Participant Name</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows.map((row, index) => (
+                            <TableRow key={row.ParticipantId}>
+                                <TableCell component="th" scope="row">
+                                    {row.ParticipantId}
+                                </TableCell>
+                                <TableCell align='left'>{}</TableCell>
+                                <TableCell align='left'>{}</TableCell>
+                                <TableCell align='left'>{}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
+            <br/>
+            <br/>
+
+            <Button color="primary" variant='outlined' startIcon={<AddIcon />}
+            >
+                Add participant to meeting
+            </Button> 
 
         </div>
     )
